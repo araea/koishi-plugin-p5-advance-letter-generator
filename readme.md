@@ -63,6 +63,7 @@ p5 UI 图片，示例如下：
 ## 🙏 致谢
 
 * [Koishi](https://koishi.chat/) - 机器人框架
+* [F.a.i.t.h](https://user.qzone.qq.com/185110524) - 优秀的 QQ 群友
 * [女神异闻录5](https://www.jp.playstation.com/games/persona-5-royal/) - 一款优秀的角色扮演游戏
 * [nonebot-plugin-p5generator](https://github.com/xi-yue-233/nonebot-plugin-p5generator) - 优秀的插件代码库
 
