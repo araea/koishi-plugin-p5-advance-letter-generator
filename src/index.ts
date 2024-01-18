@@ -266,7 +266,7 @@ export function apply(ctx: Context, config: Config) {
     const img = new Image();
     img.src = './background.png';
     img.onload = function () {
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
     };
 
     generateAdvanceLetterImage('${text}', canvas.width, canvas.height).then(imageData => {
@@ -562,7 +562,7 @@ export function apply(ctx: Context, config: Config) {
     const img = new Image();
     img.src = './background.png';
     img.onload = function () {
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
     };
 
     generateAdvanceLetterImage('${text}', canvas.width, canvas.height).then(imageData => {
