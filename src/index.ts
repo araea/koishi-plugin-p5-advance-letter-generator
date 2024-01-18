@@ -190,7 +190,7 @@ export function apply(ctx: Context, config: Config) {
             // context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
-            const charHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            const charHeight = metrics.fontBoundingBoxAscent  + metrics.fontBoundingBoxDescent;
             maxCharHeight = Math.max(maxCharHeight, charHeight);
 
             textHeight += maxCharHeight + 20;
@@ -224,7 +224,7 @@ export function apply(ctx: Context, config: Config) {
 
                 const charMetrics = context.measureText(char);
                 const charWidth = charMetrics.width;
-                const charHeight = charMetrics.actualBoundingBoxAscent + charMetrics.actualBoundingBoxDescent;
+                const charHeight = charMetrics.fontBoundingBoxAscent + charMetrics.fontBoundingBoxDescent;
 
                 const centerX = x + charWidth / 2;
                 const centerY = y + charHeight / 2;
@@ -242,7 +242,7 @@ export function apply(ctx: Context, config: Config) {
                 context.fillRect(x, y, charWidth, charHeight);
 
                 context.fillStyle = color;
-                context.fillText(char, x, y + charMetrics.actualBoundingBoxAscent);
+                context.fillText(char, x, y + charMetrics.fontBoundingBoxAscent);
 
                 x += charWidth + 20;
 
@@ -269,7 +269,7 @@ export function apply(ctx: Context, config: Config) {
         ctx.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
     };
 
-    generateAdvanceLetterImage('${text}', canvas.width, canvas.height).then(imageData => {
+    generateAdvanceLetterImage('${text}', ${canvasWidth}, ${canvasHeight}).then(imageData => {
         const img = new Image();
         img.src = URL.createObjectURL(new Blob([imageData], {type: 'image/png'}));
         img.onload = function () {
@@ -282,6 +282,7 @@ export function apply(ctx: Context, config: Config) {
 `
 
       const page = await ctx.puppeteer.page()
+      await page.setViewport({width: canvasWidth, height: canvasHeight})
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
       await page.setContent(h.unescape(html), {waitUntil: 'networkidle0'});
@@ -410,7 +411,7 @@ export function apply(ctx: Context, config: Config) {
       const html = `<html>
 <html lang="zh">
 <head>
-    <title>Canvas</title>
+    <title>generateUIImage</title>
     <style>
         @font-face {
             font-family: '微软雅黑 Bold';
@@ -464,7 +465,7 @@ export function apply(ctx: Context, config: Config) {
             // context.font = \`bold $\{textSize}px "\${textSize}"\`;
 
             const metrics = context.measureText(trimmedSentence);
-            const charHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            const charHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
             maxCharHeight = Math.max(maxCharHeight, charHeight);
 
             textHeight += maxCharHeight + 20;
@@ -508,7 +509,7 @@ export function apply(ctx: Context, config: Config) {
                 // 获取字符大小
                 const charMetrics = context.measureText(char);
                 const charWidth = charMetrics.width;
-                const charHeight = charMetrics.actualBoundingBoxAscent + charMetrics.actualBoundingBoxDescent;
+                const charHeight = charMetrics.fontBoundingBoxAscent + charMetrics.fontBoundingBoxDescent;
 
                 // 计算字符中心点坐标
                 const centerX = x + charWidth / 2;
@@ -536,7 +537,7 @@ export function apply(ctx: Context, config: Config) {
 
                 // 绘制字符
                 context.fillStyle = color;
-                context.fillText(char, x + 7, y + 7 + charMetrics.actualBoundingBoxAscent);
+                context.fillText(char, x + 7, y + 7 + charMetrics.fontBoundingBoxAscent);
 
 
                 // 更新x坐标
@@ -565,7 +566,7 @@ export function apply(ctx: Context, config: Config) {
         ctx.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
     };
 
-    generateAdvanceLetterImage('${text}', canvas.width, canvas.height).then(imageData => {
+    generateAdvanceLetterImage('${text}', ${canvasWidth}, ${canvasHeight}).then(imageData => {
         const img = new Image();
         img.src = URL.createObjectURL(new Blob([imageData], {type: 'image/png'}));
         img.onload = function () {
@@ -577,6 +578,7 @@ export function apply(ctx: Context, config: Config) {
 </html>
 `
       const page = await ctx.puppeteer.page()
+      await page.setViewport({width: canvasWidth, height: canvasHeight})
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
       await page.setContent(h.unescape(html), {waitUntil: 'networkidle0'});
