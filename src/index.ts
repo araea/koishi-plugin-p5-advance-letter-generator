@@ -7,7 +7,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {randomBytes} from 'crypto';
 
-export const inject = ['canvas']
+export const inject = {
+  required: ['canvas'],
+  optional: ['puppeteer'],
+}
 export const name = 'p5-advance-letter-generator'
 export const usage = `## 🎮 使用
 
@@ -85,7 +88,7 @@ export function apply(ctx: Context, config: Config) {
         return
       }
       const {canvasWidth, canvasHeight} = options
-      text = text.replace(/\/+/g, '\n');
+      text = (drawingServiceChoice === 'canvas') ? text.replace(/\/+/g, '\n') : text.replace(/\/+/g, '\\n');
       const result = await generateAdvanceLetterImage(text, canvasWidth, canvasHeight)
       await session.send(h.image(result, 'image/png'));
     })
@@ -98,7 +101,7 @@ export function apply(ctx: Context, config: Config) {
         return
       }
       const {canvasWidth, canvasHeight} = options
-      text = text.replace(/\/+/g, '\n');
+      text = (drawingServiceChoice === 'canvas') ? text.replace(/\/+/g, '\n') : text.replace(/\/+/g, '\\n');
       const result = await generateUIImage(text, canvasWidth, canvasHeight)
       await session.send(h.image(result, 'image/png'));
     })
@@ -106,10 +109,10 @@ export function apply(ctx: Context, config: Config) {
 
   async function generateAdvanceLetterImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
     if (drawingServiceChoice === 'puppeteer') {
-      const html = `<!DOCTYPE html>
+      const html = `<html>
 <html lang="zh">
 <head>
-    <title>Canvas</title>
+    <title>generateAdvanceLetterImage</title>
     <style>
         canvas {
             border: 1px solid black;
@@ -251,12 +254,14 @@ export function apply(ctx: Context, config: Config) {
       const page = await ctx.puppeteer.page()
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
-      await page.setContent(h.unescape(html), { waitUntil: 'load' });
+      await page.setContent(h.unescape(html), {waitUntil: 'load'});
       // 截取 Canvas 并返回 Buffer
       const canvas = await page.$('canvas#myCanvas');
+
+      const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
       await page.close();
-      return await canvas.screenshot({type: 'png'})
+      return buffer
     }
     // 设置字体列表
     const fonts: string[] = ['微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀'];
@@ -371,7 +376,7 @@ export function apply(ctx: Context, config: Config) {
   }
 
   async function generateUIImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
-    if(drawingServiceChoice === 'puppeteer'){
+    if (drawingServiceChoice === 'puppeteer') {
       const html = `<!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -531,14 +536,16 @@ export function apply(ctx: Context, config: Config) {
 </html>
 `
       const page = await ctx.puppeteer.page()
-      const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateUIImage.html'
+      const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
-      await page.setContent(h.unescape(html), { waitUntil: 'load' });
+      await page.setContent(h.unescape(html), {waitUntil: 'load'});
       // 截取 Canvas 并返回 Buffer
       const canvas = await page.$('canvas#myCanvas');
+
+      const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
       await page.close();
-      return await canvas.screenshot({type: 'png'})
+      return buffer
     }
     // 设置字体列表
     const fonts = ['微软雅黑 Bold'];
