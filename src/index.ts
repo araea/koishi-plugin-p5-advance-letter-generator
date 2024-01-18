@@ -579,7 +579,7 @@ export function apply(ctx: Context, config: Config) {
       const page = await ctx.puppeteer.page()
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
-      await page.setContent(h.unescape(html), {waitUntil: 'load'});
+      await page.setContent(h.unescape(html), {waitUntil: 'networkidle0'});
       // 截取 Canvas 并返回 Buffer
       const canvas = await page.$('canvas#myCanvas');
 
