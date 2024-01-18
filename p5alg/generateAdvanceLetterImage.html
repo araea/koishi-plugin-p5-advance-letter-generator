@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>Canvas</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="1770" height="1300"></canvas>
+
+<script>
+    function randomChoice(array) {
+        const randomIndex = Math.floor(Math.random() * array.length);
+        return array[randomIndex];
+    }
+
+    async function generateAdvanceLetterImage(text, canvasWidth, canvasHeight) {
+        const fonts = ['微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀'];
+        const colors = ['white', 'black', 'gray', 'red'];
+        const bgColors = {
+            white: ['black', 'gray'],
+            black: ['white', 'gray'],
+            gray: ['white', 'black'],
+            red: ['white'],
+        };
+        const canvas = document.createElement('canvas');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        const context = canvas.getContext('2d');
+        context.textAlign = 'left'; // 设置文本对齐方式为左对齐
+        context.textBaseline = 'bottom'; // 设置文本基线为底部
+
+        // const backgroundImagePath = path.join(pluginDataDir, 'background.png'); // Assuming pluginDataDir is defined
+        // const backgroundImage = await ctx.canvas.loadImage(backgroundImagePath);
+        // const backgroundImage = await loadImage('./background.png');
+        // context.drawImage(backgroundImage, 0, 0, canvasWidth, canvasHeight);
+
+        const sentences = text.split('\n');
+
+        let textHeight = 0;
+        let maxCharHeight = 0;
+        const sentencesCount = sentences.length;
+        for (const sentence of sentences) {
+            const trimmedSentence = sentence.trim();
+            const textFont = randomChoice(fonts);
+            const textSize = Math.min(1770 / trimmedSentence.length, 1300 / (sentencesCount + 6));
+            context.font = (textFont === '微软雅黑 Bold') ? `bold ${textSize}px "${textFont}"` : `${textSize}px "${textFont}"`;
+
+            const metrics = context.measureText(trimmedSentence);
+            const charHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            maxCharHeight = Math.max(maxCharHeight, charHeight);
+
+            textHeight += maxCharHeight + 20;
+        }
+
+        let y = (canvasHeight - textHeight) / 2;
+
+        for (const sentence of sentences) {
+            const trimmedSentence = sentence.trim();
+            const textSize = Math.min(1770 / (trimmedSentence.length + 6), 1300 / (sentencesCount + 6));
+            const textFont = randomChoice(fonts);
+            context.font = (textFont === '微软雅黑 Bold') ? `bold ${textSize}px "${textFont}"` : `${textSize}px "${textFont}"`;
+
+            const metrics = context.measureText(trimmedSentence);
+            const sentenceWidth = metrics.width;
+
+            let x = (canvasWidth - sentenceWidth) / 2 - 170;
+            for (let i = 0; i < trimmedSentence.length; i++) {
+                const char = trimmedSentence[i];
+
+                const charFont = randomChoice(fonts);
+                // 模拟随机字符大小
+                const randomArray = new Uint8Array(1);
+                crypto.getRandomValues(randomArray);
+                const charSize = Math.floor(textSize + (randomArray[0] / 255) * 20);
+
+                context.font = (charFont === '微软雅黑 Bold') ? `bold ${charSize}px "${charFont}"` : `${charSize}px "${charFont}"`;
+
+                const color = randomChoice(colors);
+                const bgColor = randomChoice(bgColors[color]);
+
+                const charMetrics = context.measureText(char);
+                const charWidth = charMetrics.width;
+                const charHeight = charMetrics.actualBoundingBoxAscent + charMetrics.actualBoundingBoxDescent;
+
+                const centerX = x + charWidth / 2;
+                const centerY = y + charHeight / 2;
+
+                // const randomAngle = (randomBytes(4).readUInt32BE(0) / 0xffffffff) * 10 - 5;
+                // const angle = randomAngle * Math.PI / 180;
+                const randomAngle = (Math.random() * 10) - 5;
+                const angle = randomAngle * Math.PI / 180;
+
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.translate(-centerX, -centerY);
+
+                context.fillStyle = bgColor;
+                context.fillRect(x, y, charWidth, charHeight);
+
+                context.fillStyle = color;
+                context.fillText(char, x, y + charMetrics.actualBoundingBoxAscent);
+
+                x += charWidth + 20;
+
+                context.resetTransform();
+            }
+            y += maxCharHeight + 20;
+        }
+
+        return await new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => {
+                resolve(blob);
+            }, 'image/png');
+        });
+    }
+
+
+    // 获取 Canvas 元素
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = './background.png';
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    generateAdvanceLetterImage('尊敬的金城润矢先生:\n扭曲事实沉溺于金钱利益之人 ，\n您的种种恶行，我等已全然知晓\n那个扭曲的欲望\n就由我等来收下!\n心之怪盗团-Joker敬上', canvas.width, canvas.height).then(imageData => {
+        const img = new Image();
+        img.src = URL.createObjectURL(new Blob([imageData], {type: 'image/png'}));
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0);
+        };
+    });
+</script>
+</body>
+</html>

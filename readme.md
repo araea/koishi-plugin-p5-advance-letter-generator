@@ -23,13 +23,13 @@ npm install koishi-plugin-p5-advance-letter-generator
 
 ## 🎮 使用
 
-- 你需要先安装 [koishi-plugin-canvas](https://github.com/koishijs/koishi-plugin-canvas) 插件（必须用这个），以便使用画布功能。🖼️
+- 你需要先启动 canvas 服务插件（puppeteer 或 canvas），以便使用画布功能。🖼️
 - 在 `Koishi` 默认根目录下，安装 `./data/p5alg/` 文件夹内的 5 个字体。🛠️
 - 建议为指令添加合适的别名，以便你使用该插件提供的命令，来生成 p5 预告信和 p5 UI 的图片。📸
 
 ## ⚙️ 配置项
 
-该插件目前没有提供任何配置项，但是你可以在命令中指定一些参数，如画布的宽度和高度。📏
+- `drawingServiceChoice`：选择绘制服务。📏
 
 ## 📝 命令
 
