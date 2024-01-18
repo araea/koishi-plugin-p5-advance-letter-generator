@@ -114,9 +114,37 @@ export function apply(ctx: Context, config: Config) {
 <head>
     <title>generateAdvanceLetterImage</title>
     <style>
+         @font-face {
+            font-family: '微软雅黑';
+            src: local('微软雅黑'), url(./msyh.ttc) format('truetype');
+        }
+
+        @font-face {
+            font-family: '微软雅黑 Bold';
+            src: local('微软雅黑 Bold'), url(./msyhbd.ttc) format('truetype');
+        }
+
+        @font-face {
+            font-family: '黑体';
+            src: local('黑体'), url(./simhei.ttf) format('truetype');
+        }
+
+        @font-face {
+            font-family: '新宋体';
+            src: local('新宋体'), url(./simsun.ttc) format('truetype');
+        }
+        @font-face {
+            font-family: '华文琥珀';
+            src: local('华文琥珀'), url(./STHUPO.TTF) format('truetype');
+        }
+        body {
+            font-family: '微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀';
+        }
         canvas {
             border: 1px solid black;
+             font-family: '微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀';
         }
+
     </style>
 </head>
 <body>
@@ -158,7 +186,8 @@ export function apply(ctx: Context, config: Config) {
             const trimmedSentence = sentence.trim();
             const textFont = randomChoice(fonts);
             const textSize = Math.min(1770 / trimmedSentence.length, 1300 / (sentencesCount + 6));
-            context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
+            context.font = \`\${textSize}px "\${textFont}"\`;
+            // context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const charHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
@@ -173,7 +202,7 @@ export function apply(ctx: Context, config: Config) {
             const trimmedSentence = sentence.trim();
             const textSize = Math.min(1770 / (trimmedSentence.length + 6), 1300 / (sentencesCount + 6));
             const textFont = randomChoice(fonts);
-            context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
+            context.font = \`\${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const sentenceWidth = metrics.width;
@@ -188,7 +217,7 @@ export function apply(ctx: Context, config: Config) {
                 crypto.getRandomValues(randomArray);
                 const charSize = Math.floor(textSize + (randomArray[0] / 255) * 20);
 
-                context.font = (charFont === '微软雅黑 Bold') ? \`bold \${charSize}px "\${charFont}"\` : \`\${charSize}px "\${charFont}"\`;
+                context.font = \`\${textSize}px "\${textFont}"\`;
 
                 const color = randomChoice(colors);
                 const bgColor = randomChoice(bgColors[color]);
@@ -233,6 +262,7 @@ export function apply(ctx: Context, config: Config) {
     // 获取 Canvas 元素
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'bottom'; // 设置文本基线为底部
     const img = new Image();
     img.src = './background.png';
     img.onload = function () {
@@ -254,7 +284,7 @@ export function apply(ctx: Context, config: Config) {
       const page = await ctx.puppeteer.page()
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
-      await page.setContent(h.unescape(html), {waitUntil: 'load'});
+      await page.setContent(h.unescape(html), {waitUntil: 'networkidle0'});
       // 截取 Canvas 并返回 Buffer
       const canvas = await page.$('canvas#myCanvas');
 
@@ -377,13 +407,21 @@ export function apply(ctx: Context, config: Config) {
 
   async function generateUIImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
     if (drawingServiceChoice === 'puppeteer') {
-      const html = `<!DOCTYPE html>
+      const html = `<html>
 <html lang="zh">
 <head>
     <title>Canvas</title>
     <style>
+        @font-face {
+            font-family: '微软雅黑 Bold';
+            src: local('微软雅黑 Bold'), url(./msyhbd.ttc) format('truetype');
+        }
+        body {
+          font-family: '微软雅黑 Bold';
+        }
         canvas {
             border: 1px solid black;
+            font-family: '微软雅黑 Bold';
         }
     </style>
 </head>
@@ -422,7 +460,8 @@ export function apply(ctx: Context, config: Config) {
         for (const sentence of sentences) {
             const trimmedSentence = sentence.trim();
             const textSize = Math.min(1770 / trimmedSentence.length, 1300 / (sentencesCount + 6));
-            context.font = \`bold $\{textSize}px "\${textSize}"\`;
+            context.font = \`$\{textSize}px "\${textSize}"\`;
+            // context.font = \`bold $\{textSize}px "\${textSize}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const charHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
@@ -440,7 +479,8 @@ export function apply(ctx: Context, config: Config) {
             const trimmedSentence = sentence.trim();
             const textSize = Math.min(1770 / (trimmedSentence.length + 6), 1300 / (sentencesCount + 6));
             const textFont = randomChoice(fonts);
-            context.font = \`bold \${textSize}px "\${textFont}"\`;
+            context.font = \`\${textSize}px "\${textFont}"\`;
+            // context.font = \`bold \${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const sentenceWidth = metrics.width;
@@ -457,7 +497,8 @@ export function apply(ctx: Context, config: Config) {
                 const randomArray = new Uint8Array(1);
                 crypto.getRandomValues(randomArray);
                 const charSize = Math.floor(textSize + (randomArray[0] / 255) * 20);
-                context.font = \`bold \${charSize}px "\${charFont}"\`;
+                context.font = \`\${charSize}px "\${charFont}"\`;
+                // context.font = \`bold \${charSize}px "\${charFont}"\`;
 
                 // 随机选择颜色
                 const color = randomChoice(colors);
