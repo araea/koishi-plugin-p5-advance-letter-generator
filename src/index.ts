@@ -552,7 +552,7 @@ export function apply(ctx: Context, config: Config) {
                 context.resetTransform();
             }
             // 更新y坐标以换行
-            y += maxCharHeight + 26;
+            y += maxCharHeight + 20;
         }
         return await new Promise((resolve, reject) => {
             canvas.toBlob((blob) => {
