@@ -58,8 +58,9 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.object({
-  drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('canvas').description('选择绘制服务。')
-}) as any
+  drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('canvas').description('选择绘制服务。'),
+  }
+) as any
 
 const logger = new Logger(`p5AdvanceLetterGenerator`)
 
@@ -113,7 +114,9 @@ export function apply(ctx: Context, config: Config) {
       const html = `<html>
 <html lang="zh">
 <head>
+
     <title>generateAdvanceLetterImage</title>
+
     <style>
          @font-face {
             font-family: '微软雅黑';
@@ -170,8 +173,8 @@ export function apply(ctx: Context, config: Config) {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
         const context = canvas.getContext('2d');
-        context.textAlign = 'left'; // 设置文本对齐方式为左对齐
-        context.textBaseline = 'bottom'; // 设置文本基线为底部
+        // context.textAlign = 'left'; // 设置文本对齐方式为左对齐
+        // context.textBaseline = 'bottom'; // 设置文本基线为底部
 
         // const backgroundImagePath = path.join(pluginDataDir, 'background.png'); // Assuming pluginDataDir is defined
         // const backgroundImage = await ctx.canvas.loadImage(backgroundImagePath);
@@ -188,13 +191,12 @@ export function apply(ctx: Context, config: Config) {
             const textFont = randomChoice(fonts);
             const textSize = Math.min(1770 / trimmedSentence.length, 1300 / (sentencesCount + 6));
             context.font = \`\${textSize}px "\${textFont}"\`;
-            // context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const charHeight = metrics.fontBoundingBoxAscent  + metrics.fontBoundingBoxDescent;
             maxCharHeight = Math.max(maxCharHeight, charHeight);
 
-            textHeight += maxCharHeight + 20;
+            textHeight += maxCharHeight +  20;
         }
 
         let y = (canvasHeight - textHeight) / 2;
@@ -204,6 +206,7 @@ export function apply(ctx: Context, config: Config) {
             const textSize = Math.min(1770 / (trimmedSentence.length + 6), 1300 / (sentencesCount + 6));
             const textFont = randomChoice(fonts);
             context.font = \`\${textSize}px "\${textFont}"\`;
+            // context.font = (textFont === '微软雅黑 Bold') ? \`bold \${textSize}px "\${textFont}"\` : \`\${textSize}px "\${textFont}"\`;
 
             const metrics = context.measureText(trimmedSentence);
             const sentenceWidth = metrics.width;
@@ -217,8 +220,7 @@ export function apply(ctx: Context, config: Config) {
                 const randomArray = new Uint8Array(1);
                 crypto.getRandomValues(randomArray);
                 const charSize = Math.floor(textSize + (randomArray[0] / 255) * 20);
-
-                context.font = \`\${textSize}px "\${textFont}"\`;
+                context.font = \`\${charSize}px "\${textFont}"\`;
 
                 const color = randomChoice(colors);
                 const bgColor = randomChoice(bgColors[color]);
@@ -240,7 +242,7 @@ export function apply(ctx: Context, config: Config) {
                 context.translate(-centerX, -centerY);
 
                 context.fillStyle = bgColor;
-                context.fillRect(x, y, charWidth, charHeight);
+                context.fillRect(x, y, charWidth, charHeight + 10);
 
                 context.fillStyle = color;
                 context.fillText(char, x, y + charMetrics.fontBoundingBoxAscent);
@@ -295,6 +297,8 @@ export function apply(ctx: Context, config: Config) {
       await page.close();
       return buffer
     }
+
+
     // 设置字体列表
     const fonts: string[] = ['微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀'];
     // 设置颜色列表
@@ -448,8 +452,6 @@ export function apply(ctx: Context, config: Config) {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
         const context = canvas.getContext('2d');
-        context.textAlign = 'left'; // 设置文本对齐方式为左对齐
-        context.textBaseline = 'bottom'; // 设置文本基线为底部
 
 
         // 分割文本为多个句子
@@ -466,9 +468,10 @@ export function apply(ctx: Context, config: Config) {
             // context.font = \`bold $\{textSize}px "\${textSize}"\`;
 
             const metrics = context.measureText(trimmedSentence);
-            const charHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+            const charHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent + 20;
             maxCharHeight = Math.max(maxCharHeight, charHeight);
 
+            // textHeight += maxCharHeight;
             textHeight += maxCharHeight + 20;
         }
 
@@ -509,6 +512,7 @@ export function apply(ctx: Context, config: Config) {
 
                 // 获取字符大小
                 const charMetrics = context.measureText(char);
+                // console.log(charMetrics)
                 const charWidth = charMetrics.width;
                 const charHeight = charMetrics.fontBoundingBoxAscent + charMetrics.fontBoundingBoxDescent;
 
@@ -548,7 +552,7 @@ export function apply(ctx: Context, config: Config) {
                 context.resetTransform();
             }
             // 更新y坐标以换行
-            y += maxCharHeight + 20;
+            y += maxCharHeight + 26;
         }
         return await new Promise((resolve, reject) => {
             canvas.toBlob((blob) => {
