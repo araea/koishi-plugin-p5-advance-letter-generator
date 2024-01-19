@@ -58,7 +58,7 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.object({
-  drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('canvas').description('选择绘制服务。'),
+  drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('puppeteer').description('选择绘制服务。'),
   }
 ) as any
 
