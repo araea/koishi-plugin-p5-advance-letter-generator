@@ -284,7 +284,9 @@ export function apply(ctx: Context, config: Config) {
 </html>
 `
 
-      const page = await ctx.puppeteer.page()
+      const browser = ctx.puppeteer.browser
+      const context = await browser.createBrowserContext()
+      const page = await context.newPage()
       await page.setViewport({width: canvasWidth, height: canvasHeight})
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
@@ -582,7 +584,9 @@ export function apply(ctx: Context, config: Config) {
 </body>
 </html>
 `
-      const page = await ctx.puppeteer.page()
+      const browser = ctx.puppeteer.browser
+      const context = await browser.createBrowserContext()
+      const page = await context.newPage()
       await page.setViewport({width: canvasWidth, height: canvasHeight})
       const htmlPath = 'file://' + pluginDataDir.replaceAll('\\', '/') + '/generateAdvanceLetterImage.html'
       await page.goto(htmlPath)
