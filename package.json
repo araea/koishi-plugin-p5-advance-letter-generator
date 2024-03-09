@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-p5-advance-letter-generator",
   "description": "模拟生成《女神异闻录5》中的 p5 预告信和 p5 UI，感受佐仓双叶的魅力和 p5 的风格。",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -38,10 +38,10 @@
     "生成器"
   ],
   "peerDependencies": {
-    "koishi": "^4.16.7"
+    "koishi": "^4.17.2"
   },
   "devDependencies": {
     "koishi-plugin-canvas": "^0.2.2",
-    "koishi-plugin-puppeteer": "^3.7.3"
+    "koishi-plugin-puppeteer": "^3.8.2"
   }
 }

@@ -296,7 +296,7 @@ export function apply(ctx: Context, config: Config) {
 
       const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
-      await page.close();
+      await page.close();await context.close();
       return buffer
     }
 
@@ -596,7 +596,7 @@ export function apply(ctx: Context, config: Config) {
 
       const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
-      await page.close();
+      await page.close();await context.close();
       return buffer
     }
     // 设置字体列表
