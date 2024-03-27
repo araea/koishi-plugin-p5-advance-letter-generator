@@ -58,7 +58,7 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.object({
-  drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('puppeteer').description('选择绘制服务。'),
+    drawingServiceChoice: Schema.union(['canvas', 'puppeteer']).default('puppeteer').description('选择绘制服务。'),
   }
 ) as any
 
@@ -81,7 +81,7 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({session}) => {
       await session.execute(`p5advanceLetter -h`)
     })
-  ctx.command('p5advanceLetter.generateAdvanceLetter [text:text]', '生成p5预告信')
+  ctx.command('p5advanceLetter.生成预告信 [text:text]', '生成p5预告信')
     .option('canvasWidth', '-w [canvasWidth:number] 画布宽度', {fallback: 1770})
     .option('canvasHeight', '--height [canvasHeight:number] 画布高度', {fallback: 1300})
     .action(async ({session, options}, text) => {
@@ -94,7 +94,7 @@ export function apply(ctx: Context, config: Config) {
       const result = await generateAdvanceLetterImage(text, canvasWidth, canvasHeight)
       await session.send(h.image(result, 'image/png'));
     })
-  ctx.command('p5advanceLetter.generateUI [text:text]', '生成p5UI')
+  ctx.command('p5advanceLetter.生成UI [text:text]', '生成p5UI')
     .option('canvasWidth', '-w [canvasWidth:number] 画布宽度', {fallback: 1770})
     .option('canvasHeight', '--height [canvasHeight:number] 画布高度', {fallback: 1300})
     .action(async ({session, options}, text) => {
@@ -296,7 +296,8 @@ export function apply(ctx: Context, config: Config) {
 
       const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
-      await page.close();await context.close();
+      await page.close();
+      await context.close();
       return buffer
     }
 
@@ -596,7 +597,8 @@ export function apply(ctx: Context, config: Config) {
 
       const buffer = await canvas.screenshot({type: 'png'})
       // 关闭 page
-      await page.close();await context.close();
+      await page.close();
+      await context.close();
       return buffer
     }
     // 设置字体列表
