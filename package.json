@@ -1,22 +1,45 @@
 {
   "name": "koishi-plugin-p5-advance-letter-generator",
-  "description": "",
-  "version": "0.0.1",
+  "description": "模拟生成《女神异闻录5》中的 p5 预告信和 p5 UI，感受佐仓双叶的魅力和 p5 的风格。",
+  "version": "1.1.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
+  "koishi": {
+    "service": {
+      "required": [
+        "canvas"
+      ]
+    }
+  },
   "license": "MIT",
-  "scripts": {},
+  "author": "Nawyjx <3373167460@qq.com>",
+  "homepage": "https://www.npmjs.com/package/koishi-plugin-p5-advance-letter-generator?activeTab=readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/araea/koishi-plugin-p5-advance-letter-generator.git"
+  },
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "p5",
+    "女神异闻录5",
+    "预告信",
+    "心之怪盗团向罪人宣战",
+    "advanceLetter",
+    "advance-letter",
+    "generator",
+    "ui",
+    "生成器"
   ],
-  "devDependencies": {},
   "peerDependencies": {
-    "koishi": "^4.17.4"
+    "koishi": "^4.17.3"
+  },
+  "devDependencies": {
+    "koishi-plugin-puppeteer": "^3.8.3"
   }
 }
