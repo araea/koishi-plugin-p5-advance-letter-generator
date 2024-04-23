@@ -63,6 +63,14 @@ p5 UI 图片，示例如下：
 * [女神异闻录5](https://www.jp.playstation.com/games/persona-5-royal/) - 一款优秀的游戏
 * [nonebot-plugin-p5generator](https://github.com/xi-yue-233/nonebot-plugin-p5generator) - nonebot 插件代码参考
 
-## 📄 License
+## 🐱 QQ 群
 
-MIT License © 2023
+- 956758505
+
+## ✨ License
+
+MIT License © 2024
+
+希望您喜欢这款插件！ 💫
+
+如有任何问题或建议，欢迎联系我哈~ 🎈
