@@ -4,44 +4,30 @@ import {} from 'koishi-plugin-puppeteer'
 import * as path from 'path';
 
 export const inject = {
-  required: ['canvas','puppeteer'],
+  required: ['canvas', 'puppeteer'],
 }
 export const name = 'p5-advance-letter-generator'
-export const usage = `## 🎮 使用
+export const usage = `## 使用
 
-- 启动 \`puppeteer\` 服务插件。🖼️
-- 建议为指令添加合适的别名。📸
+1. 启动 \`puppeteer\` 服务。️
+2. 设置指令别名。
 
-## 📝 命令
+## 特性
 
-该插件提供了两个命令，分别是：
+- 文本参数是必需的，可用 \`/\` 换行。
 
-- \`p5advanceLetter\`：查看 p5 预告信生成帮助。📚
-- \`p5advanceLetter.generateAdvanceLetter [text:text]\`：生成 p5 预告信。💌
-- \`p5advanceLetter.generateUI [text:text]\`：生成 p5 UI。🎨
+- 可用以下选项调整生成：
+  - \`-w [canvasWidth:number]\`：画布宽度，默认为 1770 像素。
+  - \`--height [canvasHeight:number]\`：画布高度，默认为 1300 像素。
 
-其中，\`[text:text]\` 参数是必须的，表示要生成的文本内容。你可以用 \`/\` 来换行。🔤
+- 示例：
+  - 生成一张 1920px * 1080px 的 p5 预告信图片：
 
-你还可以使用以下选项来调整生成的图片：
-
-- \`-w [canvasWidth:number]\`：画布宽度，默认为 1770 像素。🔢
-- \`--height [canvasHeight:number]\`：画布高度，默认为 1300 像素。🔢
-
-例如，你可以输入以下命令：
-
-\`\`\`bash
+\`\`\`
 p5advanceLetter.generateAdvanceLetter -w 1920 --height 1080 尊敬的金城润矢先生:/扭曲事实沉溺于金钱利益之人 ，/您的种种恶行，我等已全然知晓/那个扭曲的欲望/就由我等来收下!/心之怪盗团-Joker敬上
 \`\`\`
 
-来生成一张宽为 1920 像素，高为 1080 像素的 p5 预告信图片，示例如下：
-
-![p5预告信示例](https://camo.githubusercontent.com/b9cb7d845e60d4b5b318f76a1b3291df9f54e1b59542ca2dbf06780f16ad5099/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032342f706e672f33343533383636322f313730343138323236393530342d38613638636131612d306234382d343532352d623537662d3337326434323730363932382e706e673f782d6f73732d70726f636573733d696d616765253246726573697a65253243775f3933372532436c696d69745f30)
-
-p5 UI 图片，示例如下：
-
-![p5UI示例](https://camo.githubusercontent.com/b5f72c1632444b9eaf0441e76b48afbc33a8a11e40c96cb82a7ad89a188227df/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032342f706e672f33343533383636322f313730343138323236393532322d64616264643165662d343961322d346137342d613833382d3339326333313132616565372e706e673f782d6f73732d70726f636573733d696d616765253246726573697a65253243775f3933372532436c696d69745f30)
-
-## 🐱 QQ 群
+## QQ 群
 
 - 956758505`
 
@@ -96,7 +82,7 @@ export function apply(ctx: Context, config: Config) {
 
   // hs*
   async function generateAdvanceLetterImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
-      const html = `<html>
+    const html = `<html>
 <html lang="zh">
 <head>
     <title>generateAdvanceLetterImage</title>
@@ -246,22 +232,22 @@ export function apply(ctx: Context, config: Config) {
 </html>
 `
 
-      const browser = ctx.puppeteer.browser
-      const context = await browser.createBrowserContext()
-      const page = await context.newPage()
-      await page.setViewport({width: canvasWidth, height: canvasHeight})
-      await page.goto(pageGotoFilePath)
-      await page.setContent(h.unescape(html), {waitUntil: 'load'});
-      const canvas = await page.$('canvas#myCanvas');
+    const browser = ctx.puppeteer.browser
+    const context = await browser.createBrowserContext()
+    const page = await context.newPage()
+    await page.setViewport({width: canvasWidth, height: canvasHeight})
+    await page.goto(pageGotoFilePath)
+    await page.setContent(h.unescape(html), {waitUntil: 'load'});
+    const canvas = await page.$('canvas#myCanvas');
 
-      const buffer = await canvas.screenshot({type: config.imageType})
-      await page.close();
-      await context.close();
-      return buffer
+    const buffer = await canvas.screenshot({type: config.imageType})
+    await page.close();
+    await context.close();
+    return buffer
   }
 
   async function generateUIImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
-      const html = `<html>
+    const html = `<html>
 <html lang="zh">
 <head>
     <title>generateUIImage</title>
@@ -410,18 +396,18 @@ export function apply(ctx: Context, config: Config) {
 </body>
 </html>
 `
-      const browser = ctx.puppeteer.browser
-      const context = await browser.createBrowserContext()
-      const page = await context.newPage()
-      await page.setViewport({width: canvasWidth, height: canvasHeight})
-      await page.goto(pageGotoFilePath)
-      await page.setContent(h.unescape(html), {waitUntil: 'load'});
-      const canvas = await page.$('canvas#myCanvas');
+    const browser = ctx.puppeteer.browser
+    const context = await browser.createBrowserContext()
+    const page = await context.newPage()
+    await page.setViewport({width: canvasWidth, height: canvasHeight})
+    await page.goto(pageGotoFilePath)
+    await page.setContent(h.unescape(html), {waitUntil: 'load'});
+    const canvas = await page.$('canvas#myCanvas');
 
-      const buffer = await canvas.screenshot({type: config.imageType})
-      await page.close();
-      await context.close();
-      return buffer
+    const buffer = await canvas.screenshot({type: config.imageType})
+    await page.close();
+    await context.close();
+    return buffer
   }
 }
 
