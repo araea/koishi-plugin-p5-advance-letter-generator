@@ -1,8 +1,10 @@
 * text eol=lf
-
 *.png -text
 *.jpg -text
 *.ico -text
 *.gif -text
 *.webp -text
+.TTF filter=lfs diff=lfs merge=lfs -text
+.ttc filter=lfs diff=lfs merge=lfs -text
+*.ttf filter=lfs diff=lfs merge=lfs -text
 msyh.ttc filter=lfs diff=lfs merge=lfs -text
