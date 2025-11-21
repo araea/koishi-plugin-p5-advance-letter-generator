@@ -81,7 +81,19 @@ export function apply(ctx: Context, config: Config) {
     })
 
   // hs*
+
+  // 辅助函数：安全地序列化字符串以嵌入 HTML Script 标签
+  function safeJsonStringify(str: string) {
+    // 1. JSON.stringify 处理引号和反斜杠
+    // 2. replace 处理 </script> 攻击
+    return JSON.stringify(str)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e');
+  }
+
   async function generateAdvanceLetterImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
+    // 安全处理 text
+     const safeText = safeJsonStringify(text);
     const html = `<html>
 <html lang="zh">
 <head>
@@ -92,12 +104,12 @@ export function apply(ctx: Context, config: Config) {
     <style>
          @font-face {
             font-family: '微软雅黑';
-            src: local('微软雅黑'), url('./assets/fonts/msyh.woff2') format('truetype');
+            src: local('微软雅黑'), url('./assets/fonts/msyh.ttf') format('truetype');
         }
 
         @font-face {
             font-family: '微软雅黑 Bold';
-            src: local('微软雅黑 Bold'), url('./assets/fonts/msyhbd.ttc') format('truetype');
+            src: local('微软雅黑 Bold'), url('./assets/fonts/msyhbd.ttf') format('truetype');
         }
 
         @font-face {
@@ -107,11 +119,11 @@ export function apply(ctx: Context, config: Config) {
 
         @font-face {
             font-family: '新宋体';
-            src: local('新宋体'), url('./assets/fonts/simsun.ttc') format('truetype');
+            src: local('新宋体'), url('./assets/fonts/simsun.ttf') format('truetype');
         }
         @font-face {
             font-family: '华文琥珀';
-            src: local('华文琥珀'), url('./assets/fonts/STHUPO.TTF') format('truetype');
+            src: local('华文琥珀'), url('./assets/fonts/STHUPO.ttf') format('truetype');
         }
         body {
             font-family: '微软雅黑', '微软雅黑 Bold', '黑体', '新宋体', '华文琥珀';
@@ -146,12 +158,12 @@ export function apply(ctx: Context, config: Config) {
     canvas.width = ${canvasWidth};
     canvas.height = ${canvasHeight};
     const context = canvas.getContext('2d');
-    const text = '${text}';
+    const text = '${safeText}';
     const img = new Image();
     img.src = './assets/background.png';
     img.onload = () => {
         context.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
-         const sentences = text.split('\\n');
+        const sentences = text.split('\\\\n');
 
         let textHeight = 0;
         let maxCharHeight = 0;
@@ -233,8 +245,7 @@ export function apply(ctx: Context, config: Config) {
 `
 
     const browser = ctx.puppeteer.browser
-    const context = await browser.createBrowserContext()
-    const page = await context.newPage()
+    const page = await browser.newPage()
     await page.setViewport({width: canvasWidth, height: canvasHeight})
     await page.goto(pageGotoFilePath)
     await page.setContent(h.unescape(html), {waitUntil: 'load'});
@@ -242,11 +253,12 @@ export function apply(ctx: Context, config: Config) {
 
     const buffer = await canvas.screenshot({type: config.imageType})
     await page.close();
-    await context.close();
     return buffer
   }
 
   async function generateUIImage(text: string, canvasWidth: number, canvasHeight: number): Promise<Buffer> {
+    // 安全处理 text
+      const safeText = safeJsonStringify(text);
     const html = `<html>
 <html lang="zh">
 <head>
@@ -254,7 +266,7 @@ export function apply(ctx: Context, config: Config) {
     <style>
         @font-face {
             font-family: '微软雅黑 Bold';
-            src: local('微软雅黑 Bold'), url('./assets/fonts/msyhbd.ttc') format('truetype');
+            src: local('微软雅黑 Bold'), url('./assets/fonts/msyhbd.ttf') format('truetype');
         }
         body {
           font-family: '微软雅黑 Bold';
@@ -275,7 +287,7 @@ export function apply(ctx: Context, config: Config) {
         return array[randomIndex];
     }
 
-    const text = '${text}';
+    const text = '${safeText}';
         // 设置字体列表
         const fonts = ['微软雅黑 Bold'];
         // 设置颜色列表
@@ -294,7 +306,7 @@ export function apply(ctx: Context, config: Config) {
         context.drawImage(img, 0, 0, ${canvasWidth}, ${canvasHeight});
 
         // 分割文本为多个句子
-        const sentences = text.split('\\n');
+        const sentences = text.split('\\\\n');
 
         // 计算文本总高度和最大字符高度
         let textHeight = 0;
@@ -397,8 +409,7 @@ export function apply(ctx: Context, config: Config) {
 </html>
 `
     const browser = ctx.puppeteer.browser
-    const context = await browser.createBrowserContext()
-    const page = await context.newPage()
+    const page = await browser.newPage()
     await page.setViewport({width: canvasWidth, height: canvasHeight})
     await page.goto(pageGotoFilePath)
     await page.setContent(h.unescape(html), {waitUntil: 'load'});
@@ -406,8 +417,6 @@ export function apply(ctx: Context, config: Config) {
 
     const buffer = await canvas.screenshot({type: config.imageType})
     await page.close();
-    await context.close();
     return buffer
   }
 }
-
