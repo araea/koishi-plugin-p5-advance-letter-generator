@@ -24,7 +24,7 @@ export const usage = `## 使用
   - 生成一张 1920px * 1080px 的 p5 预告信图片：
 
 \`\`\`
-p5advanceLetter.generateAdvanceLetter -w 1920 --height 1080 尊敬的金城润矢先生:/扭曲事实沉溺于金钱利益之人 ，/您的种种恶行，我等已全然知晓/那个扭曲的欲望/就由我等来收下!/心之怪盗团-Joker敬上
+p5advanceLetter.生成预告信 -w 1920 --height 1080 尊敬的金城润矢先生:/扭曲事实沉溺于金钱利益之人 ，/您的种种恶行，我等已全然知晓/那个扭曲的欲望/就由我等来收下!/心之怪盗团-Joker敬上
 \`\`\`
 
 ## QQ 群
