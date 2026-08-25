@@ -20,6 +20,7 @@ const STYLES = {
     padY: 10,
     stroke: null as string,
     mixFonts: true,
+    preferred: null as string,
   },
   ui: {
     colors: ['white', 'red'],
@@ -28,10 +29,21 @@ const STYLES = {
     padY: 7,
     stroke: 'white',
     mixFonts: false,
+    // UI 风格整张图共用一款粗体，与旧版一致
+    preferred: '微软雅黑 Bold',
   },
 }
 
-const FONT_EXTENSIONS = new Set(['.ttf', '.otf', '.woff', '.woff2'])
+const FONT_EXTENSIONS = new Set(['.ttf', '.ttc', '.otf', '.woff', '.woff2'])
+
+/** 随包分发的字体：字体族名 -> `assets/fonts` 下的文件名。 */
+const BUNDLED_FONTS: Record<string, string> = {
+  '微软雅黑': 'msyh.ttf',
+  '微软雅黑 Bold': 'msyhbd.ttf',
+  '黑体': 'simhei.ttf',
+  '新宋体': 'simsun.ttf',
+  '华文琥珀': 'STHUPO.TTF',
+}
 
 /** 在浏览器里跑的排版 + 绘制逻辑。 */
 const CLIENT_SCRIPT = String.raw`
@@ -52,7 +64,7 @@ async ({ text, width, height, style, background }) => {
 
   const pick = (list) => list[Math.floor(Math.random() * list.length)]
   const lines = text.split('\n').map((line) => line.trim())
-  const sharedFont = pick(style.fonts)
+  const sharedFont = style.fonts.includes(style.preferred) ? style.preferred : pick(style.fonts)
 
   // 第一遍：给每个字定好字体、字号与配色，并量出真实尺寸
   const rows = lines.map((line) => {
@@ -130,11 +142,15 @@ export function createRenderer(ctx: Context, config: Config) {
     } catch (error) {
       logger.warn('读取字体目录 %s 失败：%s', fontDir, error.message)
     }
-    // 只为目录里真有文件的字体写 @font-face；系统自带的字体直接按名字用即可
+    // 优先用用户自备的同名字体文件，其次用随包分发的那份；
+    // 两者都没有就不写 @font-face，交给浏览器按名字找系统字体
     return config.fonts.map((family) => {
-      const file = files.find((name) => path.parse(name).name === family)
-      if (!file) return ''
-      const url = `file://${path.join(fontDir, file).replace(/\\/g, '/')}`
+      const custom = files.find((name) => path.parse(name).name === family)
+      const file = custom
+        ? path.join(fontDir, custom)
+        : BUNDLED_FONTS[family] && path.join(__dirname, 'assets', 'fonts', BUNDLED_FONTS[family])
+      if (!file || !fs.existsSync(file)) return ''
+      const url = `file://${file.replace(/\\/g, '/')}`
       return `@font-face { font-family: "${family}"; src: local("${family}"), url("${url}"); }`
     }).filter(Boolean).join('\n    ')
   }

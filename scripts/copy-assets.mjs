@@ -2,11 +2,8 @@ import { cp, mkdir } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// 只带上背景图与那张空白页；字体是系统字体或用户自备，不随包分发
+// 背景图、空白页与内置字体都要随包发布，页面靠 file:// 读取它们
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const target = resolve(root, 'lib/assets')
-await mkdir(target, { recursive: true })
-for (const file of ['background.png', 'blank.html']) {
-  await cp(resolve(root, 'src/assets', file), resolve(target, file))
-}
+await mkdir(resolve(root, 'lib'), { recursive: true })
+await cp(resolve(root, 'src/assets'), resolve(root, 'lib/assets'), { recursive: true })
 console.log('copied assets to lib/assets/')
