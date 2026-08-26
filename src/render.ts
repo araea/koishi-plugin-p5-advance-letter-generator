@@ -66,33 +66,58 @@ async ({ text, width, height, style, background }) => {
   const lines = text.split('\n').map((line) => line.trim())
   const sharedFont = style.fonts.includes(style.preferred) ? style.preferred : pick(style.fonts)
 
-  // 第一遍：给每个字定好字体、字号与配色，并量出真实尺寸
-  const rows = lines.map((line) => {
+  // 每个字的字体、抖动量与配色先定下来；后面整体缩放时这些保持不变，
+  // 否则缩一次就换一套随机数，观感会跟着跳
+  const plan = lines.map((line) => [...line].map((char) => {
+    const color = pick(style.colors)
+    return {
+      char,
+      font: style.mixFonts ? pick(style.fonts) : sharedFont,
+      jitter: Math.random() * 20,
+      color,
+      background: pick(style.contrast[color]),
+    }
+  }))
+
+  // 按给定比例排一遍版，量出每行的真实宽高。字间距同样按比例缩，
+  // 否则字缩了、间距没缩，长行永远收不进画布
+  const layout = (scale) => plan.map((chars, index) => {
+    const line = lines[index]
     const base = Math.min(width / (line.length + 6), height / (lines.length + 6))
-    const chars = [...line].map((char) => {
-      const font = style.mixFonts ? pick(style.fonts) : sharedFont
-      const size = Math.floor(base + Math.random() * 20)
-      context.font = size + 'px "' + font + '"'
-      const metrics = context.measureText(char)
-      const color = pick(style.colors)
+    const measured = chars.map((item) => {
+      const size = Math.max(8, Math.floor((base + item.jitter) * scale))
+      context.font = size + 'px "' + item.font + '"'
+      const metrics = context.measureText(item.char)
       return {
-        char, font, size, color,
-        background: pick(style.contrast[color]),
+        ...item, size,
         width: metrics.width,
         ascent: metrics.fontBoundingBoxAscent,
         height: metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent,
       }
     })
+    const gap = GAP * scale
     return {
-      chars,
-      width: chars.reduce((sum, item) => sum + item.width + GAP, -GAP),
-      height: chars.reduce((max, item) => Math.max(max, item.height), 0),
+      chars: measured,
+      width: measured.reduce((sum, item) => sum + item.width + gap, -gap),
+      height: measured.reduce((max, item) => Math.max(max, item.height), 0),
     }
   })
 
+  // 基准字号没把字间距算进去，长行会顶出画布；量完按最宽的一行整体收一次。
+  // 宽度与 scale 成正比（字宽和间距都乘了 scale），所以一次就能收到位
+  let scale = 1
+  let rows = layout(scale)
+  const limit = width * 0.96
+  const widest = rows.reduce((max, row) => Math.max(max, row.width), 0)
+  if (widest > limit) {
+    scale = limit / widest
+    rows = layout(scale)
+  }
+  const gap = GAP * scale
+
   // 第二遍：整体居中后逐字绘制。行高统一取最高的一行，行距才不会忽宽忽窄
   const rowHeight = rows.reduce((max, row) => Math.max(max, row.height), 0)
-  const total = rows.length * (rowHeight + GAP) - GAP
+  const total = rows.length * (rowHeight + gap) - gap
   let y = (height - total) / 2
 
   for (const row of rows) {
@@ -120,9 +145,9 @@ async ({ text, width, height, style, background }) => {
       context.fillText(item.char, x + style.padX, y + style.padY / 2 + item.ascent)
 
       context.resetTransform()
-      x += item.width + GAP
+      x += item.width + gap
     }
-    y += rowHeight + GAP
+    y += rowHeight + gap
   }
 }`
 
