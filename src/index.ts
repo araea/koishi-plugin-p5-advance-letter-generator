@@ -40,7 +40,7 @@ export function apply(ctx: Context, config: Config) {
       .option('canvasHeight', '--height <height:posint> 画布高度')
       .usage('文本里用 `/` 换行。')
       .action(async ({ options }, text) => {
-        if (!text?.trim()) return '请给我要生成的语句呀，不然佐仓双叶来了都没办法生成！'
+        if (!text?.trim()) return '⚠️ 请输入要生成的文本。文本里用 `/` 换行。'
         const width = options.canvasWidth || config.canvasWidth
         const height = options.canvasHeight || config.canvasHeight
         const buffer = await render(text.replace(/\/+/g, '\n'), width, height, style)
