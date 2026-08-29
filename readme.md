@@ -38,10 +38,10 @@ p5advanceLetter.生成预告信 -w 1920 --height 1080 尊敬的金城润矢先�
 
 ## 致谢
 
-* [Koishi](https://koishi.chat/)
-* [F.a.i.t.h](https://user.qzone.qq.com/185110524)
-* [女神异闻录5](https://www.jp.playstation.com/games/persona-5-royal/)
-* [nonebot-plugin-p5generator](https://github.com/xi-yue-233/nonebot-plugin-p5generator)
+- [Koishi](https://koishi.chat/)
+- [F.a.i.t.h](https://user.qzone.qq.com/185110524)
+- [女神异闻录5](https://www.jp.playstation.com/games/persona-5-royal/)
+- [nonebot-plugin-p5generator](https://github.com/xi-yue-233/nonebot-plugin-p5generator)
 
 ## QQ 群
 
