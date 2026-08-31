@@ -9,24 +9,17 @@ export const inject = ['puppeteer']
 
 export const usage = `## 使用
 
-1. 启动 \`puppeteer\` 服务。
-2. 文本里用 \`/\` 换行。
+文本中用 \`/\` 换行。自定义字体放入 \`data/p5-advance-letter-generator/fonts/\`。
 
-## 字体
+## 指令
 
-五款默认字体随插件分发，开箱即用。想换字体就把字体文件放进
-\`data/p5-advance-letter-generator/fonts\`，文件名（去掉扩展名）即字体族名，
-同名会覆盖内置的那份，放进去即时生效。
+| 指令 | 说明 |
+| --- | --- |
+| \`p5advanceLetter\` | 查看帮助 |
+| \`p5advanceLetter.生成预告信 <文本>\` | 生成预告信 |
+| \`p5advanceLetter.生成UI <文本>\` | 生成 UI 风格图 |
 
-## 示例
-
-\`\`\`
-p5advanceLetter.生成预告信 -w 1920 --height 1080 尊敬的金城润矢先生:/扭曲事实沉溺于金钱利益之人，/您的种种恶行，我等已全然知晓/那个扭曲的欲望/就由我等来收下!/心之怪盗团-Joker敬上
-\`\`\`
-
-## QQ 群
-
-- 956758505`
+支持 \`-w <宽度>\` 与 \`--height <高度>\`。`
 
 export function apply(ctx: Context, config: Config) {
   const render = createRenderer(ctx, config)
