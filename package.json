@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-p5-advance-letter-generator",
-  "description": "Koishi 的 P5 预告信/UI 生成插件。",
+  "description": "Koishi 的 P5 预告信生成插件。",
   "version": "1.2.2",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
