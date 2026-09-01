@@ -14,9 +14,9 @@ Koishi 的 P5 预告信生成插件。
 
 | 指令 | 说明 |
 | --- | --- |
-| `p5advanceLetter` | 查看帮助 |
-| `p5advanceLetter.生成预告信 <文本>` | 生成预告信 |
-| `p5advanceLetter.生成UI <文本>` | 生成 UI 风格图 |
+| `p5letter` | 查看帮助 |
+| `p5letter.生成预告信 <文本>` | 生成预告信 |
+| `p5letter.生成UI <文本>` | 生成 UI 风格图 |
 
 支持 `-w <宽度>` 与 `--height <高度>`。
 

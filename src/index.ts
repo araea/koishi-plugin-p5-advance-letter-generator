@@ -15,17 +15,18 @@ export const usage = `## 使用
 
 | 指令 | 说明 |
 | --- | --- |
-| \`p5advanceLetter\` | 查看帮助 |
-| \`p5advanceLetter.生成预告信 <文本>\` | 生成预告信 |
-| \`p5advanceLetter.生成UI <文本>\` | 生成 UI 风格图 |
+| \`p5letter\` | 查看帮助 |
+| \`p5letter.生成预告信 <文本>\` | 生成预告信 |
+| \`p5letter.生成UI <文本>\` | 生成 UI 风格图 |
 
 支持 \`-w <宽度>\` 与 \`--height <高度>\`。`
 
 export function apply(ctx: Context, config: Config) {
   const render = createRenderer(ctx, config)
 
-  const cmd = ctx.command('p5advanceLetter', 'P5 预告信 / UI 生成')
-    .action(({ session }) => session.execute('help p5advanceLetter'))
+  const cmd = ctx.command('p5letter', 'P5 预告信 / UI 生成')
+    .alias('p5advanceLetter')
+    .action(({ session }) => session.execute('help p5letter'))
 
   function define(name: string, description: string, style: Style) {
     cmd.subcommand(`.${name} <text:text>`, description)
