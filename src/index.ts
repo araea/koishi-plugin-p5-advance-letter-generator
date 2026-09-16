@@ -34,7 +34,7 @@ export function apply(ctx: Context, config: Config) {
       .option('canvasHeight', '--height <height:posint> 画布高度')
       .usage('文本中的 `/` 表示换行。')
       .action(async ({ options }, text) => {
-        if (!text?.trim()) return '⚠️ 请输入要生成的文本。文本里用 `/` 换行。'
+        if (!text?.trim()) return '⚠️ 文本是空的\n例：「p5letter.生成预告信 我们是怪盗团/预告信」，`/` 表示换行。'
         const width = options.canvasWidth || config.canvasWidth
         const height = options.canvasHeight || config.canvasHeight
         const buffer = await render(text.replace(/\/+/g, '\n'), width, height, style)
