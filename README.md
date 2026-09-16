@@ -1,6 +1,6 @@
 # koishi-plugin-p5-advance-letter-generator
 
-P5 预告信与 UI 风格图片生成
+P5 预告信 · 预告信与 UI 风格图片生成
 
 ## 安装
 
