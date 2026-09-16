@@ -44,7 +44,7 @@ export function apply(ctx: Context, config: Config) {
         } catch (error) {
           // 图是增强不是前提：渲染不可用时把文本原样发回去
           ctx.logger('p5-advance-letter-generator').warn('图片没有渲染出来：%s', error.message)
-          return `❌ 图片没有渲染出来\n详细原因见后台日志，稍后重发即可。\n\n${content}`
+          return `❌ 图片没有渲染出来\n文本：${content}\n详细原因见后台日志，稍后重发即可。`
         }
       })
   }
