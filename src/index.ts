@@ -9,7 +9,7 @@ export const inject = ['puppeteer']
 
 export const usage = `## 使用
 
-文本中的 \`/\` 表示换行。自定义字体放入 \`data/p5-advance-letter-generator/fonts/\`。
+发送 \`p5letter.生成预告信 <文本>\` 或 \`p5letter.生成UI <文本>\` 得到一张图，文本中的 \`/\` 表示换行。自定义字体放入 \`data/p5-advance-letter-generator/fonts/\`。
 
 ## 指令
 
@@ -24,7 +24,7 @@ export const usage = `## 使用
 export function apply(ctx: Context, config: Config) {
   const render = createRenderer(ctx, config)
 
-  const cmd = ctx.command('p5letter', 'P5 预告信 / UI 生成')
+  const cmd = ctx.command('p5letter', 'P5 预告信 · UI 生成')
     .alias('p5advanceLetter')
     .action(({ session }) => session.execute('help p5letter'))
 
@@ -34,11 +34,18 @@ export function apply(ctx: Context, config: Config) {
       .option('canvasHeight', '--height <height:posint> 画布高度')
       .usage('文本中的 `/` 表示换行。')
       .action(async ({ options }, text) => {
-        if (!text?.trim()) return '⚠️ 文本是空的\n例：「p5letter.生成预告信 我们是怪盗团/预告信」，`/` 表示换行。'
+        if (!text?.trim()) return `⚠️ 文本是空的\n例：「p5letter.${name} 我们是怪盗团」。`
         const width = options.canvasWidth || config.canvasWidth
         const height = options.canvasHeight || config.canvasHeight
-        const buffer = await render(text.replace(/\/+/g, '\n'), width, height, style)
-        return h.image(buffer, `image/${config.imageType}`)
+        const content = text.replace(/\/+/g, '\n')
+        try {
+          const buffer = await render(content, width, height, style)
+          return h.image(buffer, `image/${config.imageType}`)
+        } catch (error) {
+          // 图是增强不是前提：渲染不可用时把文本原样发回去
+          ctx.logger('p5-advance-letter-generator').warn('图片没有渲染出来：%s', error.message)
+          return `❌ 图片没有渲染出来\n详细原因见后台日志，稍后重发即可。\n\n${content}`
+        }
       })
   }
 
