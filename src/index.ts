@@ -16,7 +16,7 @@ export const usage = `## 使用
 
 | 指令 | 说明 |
 | --- | --- |
-| \`p5letter\` | 帮助 |
+| \`p5letter\` | 查看帮助 |
 | \`p5letter.生成预告信 <文本>\` | 生成预告信 |
 | \`p5letter.生成UI <文本>\` | 生成 UI 风格图片 |
 
