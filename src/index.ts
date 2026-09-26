@@ -1,3 +1,4 @@
+import { usePresentation } from './ux'
 import { Context, h } from 'koishi'
 import {} from 'koishi-plugin-puppeteer'
 import { Config } from './config'
@@ -22,6 +23,7 @@ export const usage = `## 使用
 \`-w <宽度>\` 与 \`--height <高度>\` 调整图片尺寸。`
 
 export function apply(ctx: Context, config: Config) {
+  const presentation = usePresentation(ctx, 'p5letter')
   const render = createRenderer(ctx, config)
 
   const cmd = ctx.command('p5letter', 'P5 预告信 · UI 生成')
@@ -33,14 +35,15 @@ export function apply(ctx: Context, config: Config) {
       .option('canvasWidth', '-w <width:posint> 画布宽度')
       .option('canvasHeight', '--height <height:posint> 画布高度')
       .usage('文本中的 `/` 表示换行。')
-      .action(async ({ options }, text) => {
+      .action(async ({ session, options }, text) => {
         if (!text?.trim()) return `⚠️ 文本是空的\n例：「p5letter.${name} 我们是怪盗团」。`
         const width = options.canvasWidth || config.canvasWidth
         const height = options.canvasHeight || config.canvasHeight
         const content = text.replace(/\/+/g, '\n')
+        if (presentation.textOnly(session)) return h.text(content)
         try {
           const buffer = await render(content, width, height, style)
-          return h.image(buffer, `image/${config.imageType}`)
+          return presentation.present(session, h.image(buffer, `image/${config.imageType}`), h.text(content))
         } catch (error) {
           // 图是增强不是前提：渲染不可用时把文本原样发回去
           ctx.logger('p5-advance-letter-generator').warn('图片没有渲染出来：%s', error.message)

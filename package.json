@@ -1,13 +1,15 @@
 {
   "name": "koishi-plugin-p5-advance-letter-generator",
   "description": "Koishi Persona 5 预告信与 UI 图片生成插件。",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "LICENSE-APACHE",
-    "LICENSE-MIT"
+    "LICENSE-MIT",
+    "DESIGN_SYSTEM.md",
+    "CHANGELOG.md"
   ],
   "koishi": {
     "service": {
@@ -44,6 +46,7 @@
     "koishi-plugin-puppeteer": "^3.9.0"
   },
   "scripts": {
-    "yakumo:after:esbuild": "node scripts/copy-assets.mjs"
+    "yakumo:after:esbuild": "node scripts/copy-assets.mjs",
+    "check:design": "node scripts/check-design-system.mjs"
   }
 }
