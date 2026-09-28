@@ -1,6 +1,6 @@
 # P5 预告信生成器
 
-Koishi 插件，生成 Persona 5 风格的预告信和 UI 图片。
+Koishi 插件 · P5 预告信生成器
 
 ## 安装
 
