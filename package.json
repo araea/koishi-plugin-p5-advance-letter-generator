@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-p5-advance-letter-generator",
-  "description": "Koishi 插件，把文字生成《女神异闻录5》风格的预告信与 UI 图片",
+  "description": "Koishi 插件：把文字生成《女神异闻录5》风格的预告信与 UI 图片。",
   "version": "1.5.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

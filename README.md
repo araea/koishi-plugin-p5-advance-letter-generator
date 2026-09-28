@@ -1,6 +1,6 @@
 # P5 预告信生成器
 
-Koishi 插件，把文字生成《女神异闻录5》风格的预告信与 UI 图片
+Koishi 插件：把文字生成《女神异闻录5》风格的预告信与 UI 图片
 
 [![GitHub](https://img.shields.io/badge/GitHub-仓库-181717)](https://github.com/araea/koishi-plugin-p5-advance-letter-generator)
 [![npm](https://img.shields.io/badge/npm-包-CC0000)](https://www.npmjs.com/package/koishi-plugin-p5-advance-letter-generator)
