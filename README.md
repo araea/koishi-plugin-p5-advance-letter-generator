@@ -40,8 +40,7 @@ npm i koishi-plugin-p5-advance-letter-generator
 
 自定义字体文件放入 `data/p5-advance-letter-generator/fonts/`，文件名（去掉扩展名）即字体族名，同名覆盖内置字体。
 
-## 链接
+## 必要链接
 
 - [设计系统](DESIGN_SYSTEM.md)
-- [更新日志](CHANGELOG.md)
 - [MIT](LICENSE-MIT) / [Apache-2.0](LICENSE-APACHE)
