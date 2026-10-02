@@ -3,6 +3,7 @@ import { Context, h } from 'koishi'
 import {} from 'koishi-plugin-puppeteer'
 import { Config } from './config'
 import { createRenderer, Style } from './render'
+import { helpOf } from './help'
 
 export { Config }
 export const name = 'p5-advance-letter-generator'
@@ -27,7 +28,11 @@ export function apply(ctx: Context, config: Config) {
 
   const cmd = ctx.command('p5letter', 'P5 预告信 · UI 生成')
     .alias('p5advanceLetter')
-    .action(({ session }) => session.execute('help p5letter'))
+    .userFields(['authority'])
+    .action(async ({ session }) => {
+      const { title, entries } = await helpOf(session, 'p5letter')
+      return [`📋 ${title}`, ...entries.map(({ name, description }) => `${name} · ${description}`), '例：「p5letter.生成预告信 我们是怪盗团」。'].join('\n')
+    })
 
   function define(name: string, description: string, style: Style) {
     cmd.subcommand(`.${name} <text:text>`, description)
