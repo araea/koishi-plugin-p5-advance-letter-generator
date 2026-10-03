@@ -11,17 +11,17 @@ export const inject = ['puppeteer']
 
 export const usage = `## 使用
 
-发送 \`p5letter.生成预告信 <文本>\` 或 \`p5letter.生成UI <文本>\` 得到一张图，文本中的 \`/\` 表示换行。自定义字体放入 \`data/p5-advance-letter-generator/fonts/\`。
+发送 \`p5letter.生成预告信 <text:text>\` 或 \`p5letter.生成UI <text:text>\` 得到一张图，文本中的 \`/\` 表示换行。
 
 ## 指令
 
 | 指令 | 说明 |
 | --- | --- |
-| \`p5letter\` | 查看帮助 |
-| \`p5letter.生成预告信 <文本>\` | 生成预告信 |
-| \`p5letter.生成UI <文本>\` | 生成 UI 风格图片 |
+| \`p5letter\` | 查看帮助，别名 \`p5advanceLetter\` |
+| \`p5letter.生成预告信 <text:text>\` | 生成预告信 |
+| \`p5letter.生成UI <text:text>\` | 生成 UI 风格图片 |
 
-\`-w <宽度>\` 与 \`--height <高度>\` 调整图片尺寸。`
+\`-w <宽度>\` 与 \`--height <高度>\` 设置图片尺寸。`
 
 export function apply(ctx: Context, config: Config) {
   const render = createRenderer(ctx, config)

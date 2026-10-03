@@ -11,11 +11,11 @@ Koishi 插件：把文字生成《女神异闻录5》风格的预告信与 UI �
 npm i koishi-plugin-p5-advance-letter-generator
 ```
 
-启用插件，并安装 `puppeteer` 服务。自定义字体放入 `data/p5-advance-letter-generator/fonts/`。
+启用插件，并安装 `puppeteer` 服务。自定义字体放入 `data/p5-advance-letter-generator/fonts/`，文件名（去掉扩展名）即字体族名，同名覆盖内置字体。
 
 ## 快速使用
 
-发送 `p5letter.生成预告信 我们是怪盗团` 生成一张预告信，文本中的 `/` 表示换行；改用 `p5letter.生成UI` 生成 UI 风格图片。
+发送 `p5letter.生成预告信 怪盗团出击` 生成一张预告信，文本中的 `/` 表示换行；改用 `p5letter.生成UI` 生成 UI 风格图片。
 
 | 指令 | 说明 |
 | --- | --- |
@@ -38,9 +38,7 @@ npm i koishi-plugin-p5-advance-letter-generator
 
 需要 `puppeteer` 服务，渲染失败时回退为纯文本。
 
-自定义字体文件放入 `data/p5-advance-letter-generator/fonts/`，文件名（去掉扩展名）即字体族名，同名覆盖内置字体。
-
-## 必要链接
+## 链接
 
 - [设计系统](DESIGN_SYSTEM.md)
 - [MIT](LICENSE-MIT) / [Apache-2.0](LICENSE-APACHE)
